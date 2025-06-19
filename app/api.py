@@ -1,16 +1,16 @@
 from flask import Flask, request, jsonify
-from app.reservas import verificar_disponibilidad
+from app.bookings import check_availability
 
 app = Flask(__name__)
-reservas = []
+bookings = []
 
 @app.route('/reservar', methods=['POST'])
-def reservar():
+def book():
     data = request.get_json()
-    disponible = verificar_disponibilidad(reservas, data)
+    is_available = check_availability(bookings, data)
     
-    if disponible:
-        reservas.append(data)
+    if is_available:
+        bookings.append(data)
         return jsonify({"mensaje": "Reserva con éxito"}), 201
     else:
         return jsonify({"mensaje": "Sala no disponible"}), 409
